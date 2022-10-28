@@ -44,7 +44,7 @@
     </div>
     <!-- Modal -->
     <x-modals.modal>
-        @if($addOrEditEvent)
+        @if($addOrEditObject)
             <div class="w-full px-6 py-4">
                 <form wire:submit.prevent="save">
                     <div>

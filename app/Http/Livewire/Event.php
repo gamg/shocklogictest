@@ -43,7 +43,7 @@ class Event extends Component
             $this->verifyUserEvent();
         }
 
-        $this->openModal($toEdit);
+        $this->openModal(addOrEditObject: $toEdit);
     }
 
     public function create()
@@ -52,7 +52,7 @@ class Event extends Component
             $this->currentEvent = new EventModel();
         }
 
-        $this->openModal(addOrEditEvent: true);
+        $this->openModal(addOrEditObject: true);
     }
 
     public function save()

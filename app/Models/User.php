@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -48,4 +49,29 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Event::class);
     }
+
+    protected function statusColor(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->active ? 'green' : 'red',
+        );
+    }
+
+    protected function statusText(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->active ? 'Active' : 'Inactive',
+        );
+    }
+
+    public function isAdmin()
+    {
+        return $this->role;
+    }
+
+    public function isActive()
+    {
+        return $this->active;
+    }
+
 }
