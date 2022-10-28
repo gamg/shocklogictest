@@ -9,13 +9,16 @@
         <div class="max-w-2xl mx-auto py-16 sm:py-24 lg:max-w-none">
             <div class="flex items-center">
                 <h2 class="text-2xl font-extrabold text-gray-900 mr-5">Events</h2>
-                <x-actions.action wire:click.prevent="create" title="{{ __('New Event') }}" class="text-gray-800 hover:text-gray-600">
-                    <x-icons.add/>
-                </x-actions.action>
-                <div>
-                    <x-text-input wire:click="showMyEvents" id="myevents" type="checkbox" />
-                    <label for="myevents">My Events</label>
-                </div>
+                @can('execute-as-admin')
+                    <x-actions.action wire:click.prevent="create" title="{{ __('New Event') }}" class="text-gray-800 hover:text-gray-600">
+                        <x-icons.add/>
+                    </x-actions.action>
+                @else
+                    <div>
+                        <x-text-input wire:click="showMyEvents" id="myevents" type="checkbox" />
+                        <label for="myevents">My Events</label>
+                    </div>
+                @endcan
             </div>
 
             <div class="space-y-12 lg:space-y-6 lg:grid lg:grid-cols-3 lg:gap-x-6">
@@ -29,12 +32,14 @@
                         <h3 class="mt-6 text-base font-semibold text-gray-900">
                             <a href="#" wire:click.prevent="loadEvent({{ $event->id }})">{{ $event->name }}</a>
                         </h3>
-                        <div class="flex items-center" x-data>
-                            <x-actions.action wire:click.prevent="loadEvent({{ $event->id }}, true)" title="{{ __('Edit') }}" class="text-gray-800 hover:text-gray-600">
-                                <x-icons.edit/>
-                            </x-actions.action>
-                            <x-actions.delete eventName="deleteEvent" :object="$event"/>
-                        </div>
+                        @can('execute-as-admin')
+                            <div class="flex items-center" x-data>
+                                <x-actions.action wire:click.prevent="loadEvent({{ $event->id }}, true)" title="{{ __('Edit') }}" class="text-gray-800 hover:text-gray-600">
+                                    <x-icons.edit/>
+                                </x-actions.action>
+                                <x-actions.delete eventName="deleteEvent" :object="$event"/>
+                            </div>
+                        @endcan
                     </div>
                 @empty
                     <h3>{{ __('There are no events to show!') }}</h3>
@@ -42,53 +47,56 @@
             </div>
         </div>
     </div>
+
     <!-- Modal -->
     <x-modals.modal>
         @if($addOrEditObject)
-            <div class="w-full px-6 py-4">
-                <form wire:submit.prevent="save">
-                    <div>
-                        <x-input-label for="name" :value="__('Name')" />
+            @can('execute-as-admin')
+                <div class="w-full px-6 py-4">
+                    <form wire:submit.prevent="save">
+                        <div>
+                            <x-input-label for="name" :value="__('Name')" />
 
-                        <x-text-input wire:model.defer="currentEvent.name" id="name" class="block mt-1 w-full" type="text" required autofocus />
+                            <x-text-input wire:model.defer="currentEvent.name" id="name" class="block mt-1 w-full" type="text" required autofocus />
 
-                        @error("currentEvent.name")<div class="mt-1 text-red-600 text-sm">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mt-3">
-                        <x-input-label for="startdate" :value="__('Start Date')" />
+                            @error("currentEvent.name")<div class="mt-1 text-red-600 text-sm">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="mt-3">
+                            <x-input-label for="startdate" :value="__('Start Date')" />
 
-                        <x-text-input wire:model.defer="currentEvent.start_date" id="startdate" class="block mt-1 w-full" type="date" autofocus />
+                            <x-text-input wire:model.defer="currentEvent.start_date" id="startdate" class="block mt-1 w-full" type="date" autofocus />
 
-                        @error("currentEvent.start_date")<div class="mt-1 text-red-600 text-sm">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mt-3">
-                        <x-input-label for="enddate" :value="__('End Date')" />
+                            @error("currentEvent.start_date")<div class="mt-1 text-red-600 text-sm">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="mt-3">
+                            <x-input-label for="enddate" :value="__('End Date')" />
 
-                        <x-text-input wire:model.defer="currentEvent.end_date" id="enddate" class="block mt-1 w-full" type="date" autofocus />
+                            <x-text-input wire:model.defer="currentEvent.end_date" id="enddate" class="block mt-1 w-full" type="date" autofocus />
 
-                        @error("currentEvent.end_date")<div class="mt-1 text-red-600 text-sm">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mt-4">
-                        <x-input-label for="image" :value="__('Image')" />
+                            @error("currentEvent.end_date")<div class="mt-1 text-red-600 text-sm">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="mt-4">
+                            <x-input-label for="image" :value="__('Image')" />
 
-                        <x-inputs.img wire:model="imageFile" id="image">
+                            <x-inputs.img wire:model="imageFile" id="image">
                             <span class="w-24 rounded-lg overflow-hidden bg-gray-100">
                                 <img src="{{ $imageFile ? $imageFile->temporaryUrl() : $currentEvent->image_url }}" alt="{{ __('Event image') }}">
                             </span>
-                        </x-inputs.img>
+                            </x-inputs.img>
 
-                        <div wire:loading wire:target="imageFile" class="mt-1 w-full text-indigo-700">
-                            {{__('Verifying file...')}}
+                            <div wire:loading wire:target="imageFile" class="mt-1 w-full text-indigo-700">
+                                {{__('Verifying file...')}}
+                            </div>
+
+                            @error("imageFile")<div class="mt-1 text-red-600 text-sm">{{ $message }}</div>@enderror
                         </div>
 
-                        @error("imageFile")<div class="mt-1 text-red-600 text-sm">{{ $message }}</div>@enderror
-                    </div>
-
-                    <div class="mt-4">
-                        <x-primary-button class="bg-orange-500">{{ __('Save') }}</x-primary-button>
-                    </div>
-                </form>
-            </div>
+                        <div class="mt-4">
+                            <x-primary-button class="bg-orange-500">{{ __('Save') }}</x-primary-button>
+                        </div>
+                    </form>
+                </div>
+            @endcan
         @else
             <div class="mt-3 text-center sm:mt-0 sm:text-left">
                 <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
@@ -107,10 +115,12 @@
                         <img src="{{ $currentEvent->image_url }}" alt="Event Image" class="w-full h-full object-center object-cover">
                     </div>
                 </div>
-                <div class="mt-2">
-                    <x-text-input wire:click="subscribe" id="subscribe-{{$currentEvent->id}}" type="checkbox" :checked="$hasThisEvent" />
-                    <label for="subscribe-{{$currentEvent->id}}">Subscribe</label>
-                </div>
+                @cannot('execute-as-admin')
+                    <div class="mt-2">
+                        <x-text-input wire:click="subscribe" id="subscribe-{{$currentEvent->id}}" type="checkbox" :checked="$hasThisEvent" />
+                        <label for="subscribe-{{$currentEvent->id}}">Subscribe</label>
+                    </div>
+                @endcannot
             </div>
         @endif
     </x-modals.modal>

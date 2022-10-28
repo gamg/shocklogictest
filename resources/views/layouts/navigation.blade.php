@@ -15,9 +15,11 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Events') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('participants')" :active="request()->routeIs('participants')">
-                        {{ __('Participants') }}
-                    </x-nav-link>
+                    @can('execute-as-admin')
+                        <x-nav-link :href="route('participants')" :active="request()->routeIs('participants')">
+                            {{ __('Participants') }}
+                        </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
