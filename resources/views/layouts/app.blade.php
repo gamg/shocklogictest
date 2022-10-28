@@ -45,5 +45,6 @@
         <!-- Sweetalert 2 -->
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         @livewireScripts
+        @stack('scripts')
     </body>
 </html>
