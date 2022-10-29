@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'tavo@shocklogictest.com',
         ]);
 
-        User::factory(20)->create();
+        User::factory(100)->create();
 
         Event::factory(3)->create();
     }

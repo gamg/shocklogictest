@@ -1,14 +1,23 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Controllers;
 
 use App\Models\User;
-use Livewire\Component;
+use Illuminate\Http\Request;
 use LaravelDaily\LaravelCharts\Classes\LaravelChart;
 
-class UsersReport extends Component
+class UsersReportController extends Controller
 {
     public string $type = 'line';
+    public int $days = 30;
+
+    public function index(Request $request)
+    {
+        $this->type = $request->has('chart_type') ? $request->chart_type : $this->type;
+        $this->days = $request->has('days') ? $request->days : $this->days;
+
+        return view('report', ['chart' => $this->getChart()]);
+    }
 
     private function getChart()
     {
@@ -18,18 +27,12 @@ class UsersReport extends Component
             'model' => "App\Models\User",
             'group_by_field' => 'created_at',
             'group_by_period' => 'day',
-            'aggregate_function' => 'count',
             'chart_type' => $this->type,
             'filter_field' => 'created_at',
-            'filter_days' => 15,
+            'filter_days' => $this->days,
             'continuous_time' => true,
             'total' => User::count(),
-            'filter_total' => User::where('created_at', '>=', now()->subDays(15))->count()
+            'filter_total' => User::where('created_at', '>=', now()->subDays($this->days))->count()
         ]);
-    }
-
-    public function render()
-    {
-        return view('livewire.users-report', ['chart' => $this->getChart()]);
     }
 }

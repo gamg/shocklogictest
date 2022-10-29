@@ -24,9 +24,9 @@
                     {{ $participant->family_name }}
                 </td>
                 <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 bg-{{ $participant->status_color }}-100 text-{{ $participant->status_color }}-800 capitalize">
-                            {{ $participant->status_text }}
-                        </span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 bg-{{ $participant->status_color }}-100 text-{{ $participant->status_color }}-800 capitalize">
+                        {{ $participant->status_text }}
+                    </span>
                 </td>
                 <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
                     <div class="flex items-center" x-data>

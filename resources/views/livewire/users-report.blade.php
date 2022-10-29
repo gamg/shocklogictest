@@ -13,11 +13,11 @@
 {{--        <label for="bar">Bar</label>--}}
 {{--        <x-text-input id="pie" wire:model="type" value="pie" type="radio" />--}}
 {{--        <label for="pie">Pie</label>--}}
-{{--        {{ var_export($type) }}--}}
 {{--    </div>--}}
 
     <h1 class="font-bold">{{ $chart->options['chart_title'] }}</h1>
     <h2 class="font-semibold">Total: {{ $chart->options['total'] }}</h2>
+    <h2 class="font-semibold">Last 30 days: {{ $chart->options['filter_total'] }}</h2>
     {!! $chart->renderHtml() !!}
 
     @push('scripts')
