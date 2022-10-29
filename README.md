@@ -2,6 +2,9 @@
 
 Para llevar a cabo este proyecto se utilizó Laravel junto al paquete Laravel Livewire. Para poder ejecutarlo correctamente debes seguir las intrucciones de instalación.
 
+### Video Demo
+https://www.youtube.com/watch?v=zJjMzIqoAJM
+
 ## Instalación
 
 ### Pasos para instalar este proyecto en tu entorno local
